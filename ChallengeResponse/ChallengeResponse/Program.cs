@@ -41,7 +41,8 @@ namespace ChallengeResponse
             var is_ok3 = server.Authenticate(client3, login_message3);
             Console.WriteLine(Server.ResponseMESSAGE[is_ok3]);
 
-            var is_ok_replay = server.Authenticate(client, login_message3);
+            // Thread.Sleep(200); PoC replay attack don't work because of alive time of nonce but not protect if it's faster
+            var is_ok_replay = server.Authenticate(client3, login_message3);
             Console.WriteLine(Server.ResponseMESSAGE[is_ok_replay]);
 
             //========================================================//
