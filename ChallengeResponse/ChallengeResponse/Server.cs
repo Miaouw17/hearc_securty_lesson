@@ -49,7 +49,7 @@ namespace ChallengeResponse
         // https://sqlsteve.wordpress.com/2014/04/23/how-to-create-a-nonce-in-c/
         public string GenerateNonce(Client c)
         {
-            if (!dictUsers.ContainsKey(c.Login))
+            if (dictUsers.ContainsKey(c.Login))
             {             //Allocate a buffer
                 var nonce = new byte[NONCE_SIZE];
                 //Generate a cryptographically random set of bytes
