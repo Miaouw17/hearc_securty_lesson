@@ -6,6 +6,19 @@ namespace ChallengeResponse
     {
         static void Main(string[] args)
         {
+            // QUESTION - REPONSE
+            Console.WriteLine("Quel hachage cryptographique utilisez-vous et pourquoi ?");
+            Console.WriteLine("> SHA512 (De la bibliothèque Microsoft qui ne précise pas si SHA-1,2 ou 3) : Récent, efficace (256 pourrait comprendre des collisions)\n");
+            Console.WriteLine("Quelles précautions pour le générateur aléatoire ?");
+            Console.WriteLine("> S'assurer que le générateur de nombre aléatoire soit VRAIMENT (cryptographiquement=qu'on ne peut pas retrouver avec une suite de nombre généré) aléatoire et il faut gérer que 2 nonce puissent être identique (dans notre implémentation : on génére un nonce à chaque requête, dès que le serveur a gérer le message avec ce nonce valide, il le dévalide, si le générateur retombe sur le même nonce, il le revalide)\n");
+            Console.WriteLine("Quelles précautions pour la construction garantissant l'unicité du nonce ?");
+            Console.WriteLine("> On a un dictionnaire de nonce par utilisateur, pour chaque utilisateur on va gérer que sa liste à lui et puisque c'est un dictionnaire, il ne peut y être qu'une fois. Comme on les \"kill\" à chaque fois, il n'y en aura à chaque fois qu'un seul de valide\n");
+            Console.WriteLine("Quelles précautions pour la durée de validité du nonce ?");
+            Console.WriteLine("> Lui donner une valeur pas trop grande (dans notre implémentation : on met \"fin à sa vie\" lorsqu'il a été utilisé. \n\n");
+
+
+            // CODE LOGIC
+
             var server = Server.Instance;
 
             Console.WriteLine("Authentification successful : ");
