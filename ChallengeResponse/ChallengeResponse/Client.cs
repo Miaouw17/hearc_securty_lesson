@@ -10,8 +10,14 @@ namespace ChallengeResponse
     class Client
     {
         private RSACryptoServiceProvider rsa;
-        public Client()
+        public string login;
+        public string password;
+
+        public Client(string login, string password)
         {
+            this.login = login;
+            this.password = password;
+
             rsa = new RSACryptoServiceProvider();
         }
 
