@@ -70,6 +70,7 @@ namespace ChallengeResponse
             }
         }
 
+        // https://sqlsteve.wordpress.com/2014/04/23/how-to-create-a-nonce-in-c/
         public string GenerateNonce(Client c)
         {
             //Allocate a buffer
