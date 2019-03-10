@@ -25,7 +25,7 @@ namespace ChallengeResponse
             server.Register(client2);
             var nonce2 = client2.AskNonce();
             
-            Thread.Sleep(300); // Server.TIMEOUT_DELTA + 0.1 = 0.3 = 300ms
+            Thread.Sleep(500); // Server.TIMEOUT_DELTA + 0.3 = 0.5 = 500ms
             var login_message2 = client2.GenerateClientMessage(nonce2);
             var is_ok2 = server.Authenticate(client2, login_message2);
             Console.WriteLine(Server.ResponseMESSAGE[is_ok2]);
