@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Collections.Generic;
+using System.Text;
 
 namespace ChallengeResponse
 {
@@ -51,21 +52,30 @@ namespace ChallengeResponse
         {
             if (dictUsers.ContainsKey(c.Login))
             {             //Allocate a buffer
-                var nonce = new byte[NONCE_SIZE];
+                var byteNonce = new byte[NONCE_SIZE];
                 //Generate a cryptographically random set of bytes
                 using (var Rnd = RandomNumberGenerator.Create())
                 {
-                    Rnd.GetBytes(nonce);
+                    Rnd.GetBytes(byteNonce);
                 }
+
+                string hash = Tools.Calculate_hash(Convert.ToString(byteNonce), dictUsers[c.Login]);
 
                 if (!dictAvailableNonce.ContainsKey(c.Login))
                 {
                     dictAvailableNonce.Add(c.Login, new Dictionary<string, Tuple<string, DateTime>>());
                 }
-                dictAvailableNonce[c.Login].Add(Tools.Calculate_hash(Convert.ToString(nonce), dictUsers[c.Login]), new Tuple<string, DateTime>(Convert.ToString(nonce), DateTime.Now.AddSeconds(TIMEOUT_DELTA)));
 
+                if (!dictAvailableNonce[c.Login].ContainsKey(hash))
+                {
+                    dictAvailableNonce[c.Login].Add(hash, new Tuple<string, DateTime>(Convert.ToString(byteNonce), DateTime.Now.AddSeconds(TIMEOUT_DELTA)));
+                }
+                else
+                {
+                    dictAvailableNonce[c.Login][hash] = new Tuple<string, DateTime>(Convert.ToString(byteNonce), DateTime.Now.AddSeconds(TIMEOUT_DELTA));
+                }
                 //Base64 encode and then return
-                return Convert.ToString(nonce);
+                return Convert.ToString(byteNonce);
             }
 
             return null;
@@ -73,12 +83,12 @@ namespace ChallengeResponse
 
         public int Authenticate(Client c, string hash)
         {
-            if(!dictUsers.ContainsKey(c.Login))
+            if (!dictUsers.ContainsKey(c.Login))
             {
                 return 3;
             }
 
-            if(!dictAvailableNonce.ContainsKey(c.Login))
+            if (!dictAvailableNonce.ContainsKey(c.Login))
             {
                 return 4;
             }
@@ -89,7 +99,10 @@ namespace ChallengeResponse
             if (possible_nonces.ContainsKey(hash))
             {
                 if (DateTime.Now <= possible_nonces[hash].Item2)
+                {
+                    possible_nonces[hash] = new Tuple<string, DateTime>(possible_nonces[hash].Item1, DateTime.Now.AddSeconds(-1));
                     return 0;
+                }
                 else
                     return 2;
             }

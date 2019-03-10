@@ -1,4 +1,6 @@
-﻿namespace ChallengeResponse
+﻿using System.Threading;
+
+namespace ChallengeResponse
 {
     public class Client
     {
@@ -11,13 +13,11 @@
             Password = password;
         }
 
-        public string AskNonce()
+        public string GenerateClientMessage(bool sleepThread = false)
         {
-            return Server.Instance.GenerateNonce(this);
-        }
-
-        public string GenerateClientMessage(string nonce)
-        {
+            string nonce = Server.Instance.GenerateNonce(this);
+            if (sleepThread)
+                Thread.Sleep(500); // Server.TIMEOUT_DELTA + 0.3 = 0.5 = 500ms
             return Tools.Calculate_hash(nonce, Password);
         }
     }
