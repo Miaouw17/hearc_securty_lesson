@@ -9,9 +9,10 @@ namespace ChallengeResponse
 {
     public static class Tools
     {
-        // Hash SHA3
+        // Hash SHA512
         private static HashAlgorithm hash = new SHA512CryptoServiceProvider();
 
+        // https://csharp.hotexamples.com/examples/System.Security.Cryptography/SHA512CryptoServiceProvider/-/php-sha512cryptoserviceprovider-class-examples.html
         public static string Calculate_hash(string nonce, string password)
         {
             var encoded_string = EncodeUTF8((nonce + password));
