@@ -6,6 +6,7 @@ namespace ChallengeResponse
     public static class Tools
     {
         // Hash SHA512
+        // https://docs.microsoft.com/en-us/dotnet/api/system.security.cryptography.sha512?redirectedfrom=MSDN&view=netframework-4.7.2#code-snippet-1
         private static HashAlgorithm hash = new SHA512CryptoServiceProvider();
 
         // https://csharp.hotexamples.com/examples/System.Security.Cryptography/SHA512CryptoServiceProvider/-/php-sha512cryptoserviceprovider-class-examples.html
