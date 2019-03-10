@@ -9,7 +9,6 @@ namespace ChallengeResponse
 {
     public class Client
     {
-        private RSACryptoServiceProvider rsa;
         public string login;
         public string password;
 
@@ -17,8 +16,6 @@ namespace ChallengeResponse
         {
             this.login = login;
             this.password = password;
-
-            rsa = new RSACryptoServiceProvider();
         }
 
         public string AskNonce()

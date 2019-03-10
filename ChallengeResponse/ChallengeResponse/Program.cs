@@ -43,6 +43,20 @@ namespace ChallengeResponse
             var nonce3 = client3.AskNonce();
             server.Register(client3);
 
+            //========================================================//
+
+            Console.WriteLine("\n\nWrong Password : ");
+            var client4 = new Client("test23", "pass1234");
+            var nonce4 = client4.AskNonce();
+            server.Register(client4);
+
+            Thread.Sleep(300); // Server.TIMEOUT_DELTA + 0.1 = 0.3 = 300ms
+            client4.password = "Pass1234";
+            var login_message4 = client4.GenerateClientMessage(nonce4);
+            var is_ok4 = server.Authenticate(client4, login_message4);
+            Console.WriteLine(server.ResponseMESSAGE(is_ok4));
+            Console.ReadLine();
+
         }
     }
 }
