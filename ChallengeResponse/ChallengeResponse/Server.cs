@@ -87,7 +87,7 @@ namespace ChallengeResponse
         {
             if(!users.ContainsKey(c.login))
             {
-                return 0;
+                return 3;
             }
 
             if(!available_nonce.ContainsKey(c.login))
@@ -98,7 +98,7 @@ namespace ChallengeResponse
             var possible_nonces = available_nonce[c.login];
             var password = users[c.login];
 
-            foreach(var value in possible_nonces) // a trouver
+            foreach(var value in possible_nonces)
             {
                 var expected_hash = Tools.Calculate_hash(value.Key, c.password);
                 if(expected_hash == hash)
