@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ChallengeResponse
+﻿namespace ChallengeResponse
 {
     public class Client
     {
-        public string login;
-        public string password;
+        public string Login { get; set; }
+        public string Password { get; set; }
 
         public Client(string login, string password)
         {
-            this.login = login;
-            this.password = password;
+            Login = login;
+            Password = password;
         }
 
         public string AskNonce()
@@ -25,7 +18,7 @@ namespace ChallengeResponse
 
         public string GenerateClientMessage(string nonce)
         {
-            return Tools.Calculate_hash(nonce, this.password);
+            return Tools.Calculate_hash(nonce, Password);
         }
     }
 }
