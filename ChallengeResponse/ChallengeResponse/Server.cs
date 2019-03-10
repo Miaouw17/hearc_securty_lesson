@@ -132,9 +132,22 @@ namespace ChallengeResponse
             var possible_nonces = available_nonce[c.login];
             var password = users[c.login];
 
-            foreach(...) // a trouver
+            foreach(var value in possible_nonces) // a trouver
             {
-                var expected_hash = Tools.Calculate_Hash(); // TODO
+                var expected_hash = Tools.Calculate_hash(value.Key, c.password);
+                if(expected_hash == hash)
+                {
+                    // reset the nonce list for this user
+                    available_nonce[c.login] = new Dictionary<string, DateTime>();
+                    if(DateTime.Now <= value.Value)
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        return 2;
+                    }
+                }
             }
 
             return 4;

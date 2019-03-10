@@ -7,19 +7,19 @@ using System.Threading.Tasks;
 
 namespace ChallengeResponse
 {
-    static class Tools
+    public static class Tools
     {
         // Hash SHA3
         private static HashAlgorithm hash = new SHA512CryptoServiceProvider();
 
-        private static string Calculate_hash(string nonce, string password)
+        public static string Calculate_hash(string nonce, string password)
         {
             var encoded_string = EncodeUTF8((nonce + password));
 
             return Encoding.UTF8.GetString(hash.ComputeHash(encoded_string));
         }
 
-        private static byte[] EncodeUTF8(string msg)
+        public static byte[] EncodeUTF8(string msg)
         {
             string propEncodeString = string.Empty;
 
