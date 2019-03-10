@@ -52,30 +52,32 @@ namespace ChallengeResponse
         {
             if (dictUsers.ContainsKey(c.Login))
             {             //Allocate a buffer
-                var byteNonce = new byte[NONCE_SIZE];
+                var nonce = new byte[NONCE_SIZE];
                 //Generate a cryptographically random set of bytes
                 using (var Rnd = RandomNumberGenerator.Create())
                 {
-                    Rnd.GetBytes(byteNonce);
+                    Rnd.GetBytes(nonce);
                 }
 
-                string hash = Tools.Calculate_hash(Convert.ToString(byteNonce), dictUsers[c.Login]);
+                string hash = Tools.Calculate_hash(Convert.ToString(nonce), dictUsers[c.Login]);
 
                 if (!dictAvailableNonce.ContainsKey(c.Login))
                 {
                     dictAvailableNonce.Add(c.Login, new Dictionary<string, Tuple<string, DateTime>>());
                 }
 
+                //  if the nonce was already used, it is reactivate
+                // We uae the hash as key to optimise authentication
                 if (!dictAvailableNonce[c.Login].ContainsKey(hash))
                 {
-                    dictAvailableNonce[c.Login].Add(hash, new Tuple<string, DateTime>(Convert.ToString(byteNonce), DateTime.Now.AddSeconds(TIMEOUT_DELTA)));
+                    dictAvailableNonce[c.Login].Add(hash, new Tuple<string, DateTime>(Convert.ToString(nonce), DateTime.Now.AddSeconds(TIMEOUT_DELTA)));
                 }
                 else
                 {
-                    dictAvailableNonce[c.Login][hash] = new Tuple<string, DateTime>(Convert.ToString(byteNonce), DateTime.Now.AddSeconds(TIMEOUT_DELTA));
+                    dictAvailableNonce[c.Login][hash] = new Tuple<string, DateTime>(Convert.ToString(nonce), DateTime.Now.AddSeconds(TIMEOUT_DELTA));
                 }
                 //Base64 encode and then return
-                return Convert.ToString(byteNonce);
+                return Convert.ToString(nonce);
             }
 
             return null;
@@ -100,7 +102,9 @@ namespace ChallengeResponse
             {
                 if (DateTime.Now <= possible_nonces[hash].Item2)
                 {
+                    // Protect to replay attack with short delay
                     possible_nonces[hash] = new Tuple<string, DateTime>(possible_nonces[hash].Item1, DateTime.Now.AddSeconds(-1));
+
                     return 0;
                 }
                 else
