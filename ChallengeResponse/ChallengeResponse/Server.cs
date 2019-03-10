@@ -60,7 +60,14 @@ namespace ChallengeResponse
 
         public void Register(Client c)
         {
-            this.users.Add(c.login, c.password);
+            if (!users.ContainsKey(c.login))
+            {
+                this.users.Add(c.login, c.password);
+            }
+            else
+            {
+                Console.WriteLine("User already exists !");
+            }
         }
 
         public string GenerateNonce(Client c)

@@ -56,7 +56,6 @@ namespace ChallengeResponse
             var nonce4 = client4.AskNonce();
             server.Register(client4);
 
-            Thread.Sleep(300); // Server.TIMEOUT_DELTA + 0.1 = 0.3 = 300ms
             client4.password = "Pass1234";
             var login_message4 = client4.GenerateClientMessage(nonce4);
             var is_ok4 = server.Authenticate(client4, login_message4);
@@ -66,16 +65,21 @@ namespace ChallengeResponse
 
             Console.WriteLine("\n\nWrong login : ");
             var client5 = new Client("test5", "pass1234");
-            var nonce5 = client5.AskNonce();
             server.Register(client5);
+            var nonce5 = client5.AskNonce();
 
-            Thread.Sleep(300); // Server.TIMEOUT_DELTA + 0.1 = 0.3 = 300ms
             client5.login = "Test5";
             var login_message5 = client4.GenerateClientMessage(nonce5);
             var is_ok5 = server.Authenticate(client5, login_message5);
             Console.WriteLine(server.ResponseMESSAGE(is_ok5));
 
+            //========================================================//
 
+            Console.WriteLine("\n\nDouble registration : ");
+            var client6 = new Client("test6", "pass1234");
+            var client7 = new Client("test6", "pass1234");
+            server.Register(client6);
+            server.Register(client7);
 
             Console.ReadLine();
         }
