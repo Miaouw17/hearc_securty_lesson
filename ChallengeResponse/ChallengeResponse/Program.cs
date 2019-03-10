@@ -48,8 +48,8 @@ namespace ChallengeResponse
 
             Console.WriteLine("\n\nWrong Password : ");
             var client4 = new Client("test4", "pass1234");
-            var nonce4 = client4.AskNonce();
             server.Register(client4);
+            var nonce4 = client4.AskNonce();
 
             client4.Password = "Pass1234";
             var login_message4 = client4.GenerateClientMessage(nonce4);
