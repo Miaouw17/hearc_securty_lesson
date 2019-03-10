@@ -48,13 +48,13 @@ namespace ChallengeResponse
         }
 
         private Dictionary<string, string> users; // key : login, value : plain text password
-        private Dictionary<string, Dictionary<string, DateTime>> available_nonce; // key : login, value : dict((nonce, time))
+        private Dictionary<string, Dictionary<string, Tuple<string, DateTime>>> available_nonce; // key : login, value : dict((nonce, time))
 
 
         private Server()
         {
             this.users = new Dictionary<string, string>();
-            this.available_nonce = new Dictionary<string, Dictionary<string, DateTime>>();
+            this.available_nonce = new Dictionary<string, Dictionary<string, Tuple<string, DateTime>>>();
         }
 
 
@@ -83,9 +83,9 @@ namespace ChallengeResponse
 
             if(!available_nonce.ContainsKey(c.login))
             {
-                available_nonce.Add(c.login, new Dictionary<string, DateTime>());
+                available_nonce.Add(c.login, new Dictionary<string, Tuple<string, DateTime>>());
             }
-            available_nonce[c.login].Add(Convert.ToString(nonce), DateTime.Now.AddSeconds(TIMEOUT_DELTA));
+            available_nonce[c.login].Add(Tools.Calculate_hash(Convert.ToString(nonce), c.password) , new Tuple<string, DateTime>(Convert.ToString(nonce), DateTime.Now.AddSeconds(TIMEOUT_DELTA)));
 
             //Base64 encode and then return
             return Convert.ToString(nonce);
@@ -106,7 +106,7 @@ namespace ChallengeResponse
             var possible_nonces = available_nonce[c.login];
             var password = users[c.login];
 
-            foreach(var value in possible_nonces)
+            /*foreach(var value in possible_nonces)
             {
                 var expected_hash = Tools.Calculate_hash(value.Key, c.password);
                 if(expected_hash == hash)
@@ -122,7 +122,16 @@ namespace ChallengeResponse
                         return 2;
                     }
                 }
+            }*/
+
+            if (possible_nonces.ContainsKey(hash))
+            {
+                if (DateTime.Now <= possible_nonces[hash].Item2)
+                    return 0;
+                else
+                    return 2;
             }
+
             return 4;
         }
     }
