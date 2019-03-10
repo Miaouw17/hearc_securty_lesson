@@ -21,6 +21,16 @@ namespace ChallengeResponse
             rsa = new RSACryptoServiceProvider();
         }
 
+        public string AskNonce(Server s)
+        {
+            return Server.Instance.GenerateNonce(this);
+        }
+
+        public string GenerateClientMessage(string nonce)
+        {
+            return Tools.Calculate_hash(nonce, this.password);
+        }
+
         public byte[] RSAEncrypt(byte[] DataToEncrypt, bool DoOAEPPadding)
         {
             try

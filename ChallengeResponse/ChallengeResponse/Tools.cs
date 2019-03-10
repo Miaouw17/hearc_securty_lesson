@@ -19,7 +19,7 @@ namespace ChallengeResponse
             return Encoding.UTF8.GetString(hash.ComputeHash(encoded_string));
         }
 
-        public static byte[] EncodeUTF8(string msg)
+        private static byte[] EncodeUTF8(string msg)
         {
             string propEncodeString = string.Empty;
 
